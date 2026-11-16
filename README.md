@@ -4,6 +4,10 @@
 
 FabricPulse is a simulator of an AI-cluster fabric. It runs a distributed training job (and bursty inference traffic) over a leaf-spine network, injects the faults that hurt real clusters, and measures the result in the unit that matters to whoever pays for the GPUs: **Model FLOPS Utilization (MFU)**.
 
+![FabricPulse dashboard: a gray link under ECMP, 50 ms after the fault. Overloaded links are red, and the faulted optic carries a warning marker.](docs/img/dashboard-gray-link-ecmp.png)
+
+*The dashboard replaying a gray link under static ECMP, 50 ms after the fault. Simulated data.*
+
 It compares three ways of steering traffic:
 
 | policy | what it knows | how fast it reacts |
@@ -75,7 +79,9 @@ The telemetry loop still loses 22% to the network here, against 42 to 56% for th
 python -m fabricpulse.serve
 ```
 
-Then open http://localhost:8765/dashboard/. It replays any scenario under any policy: the fabric with every link coloured by utilisation, iteration time for all three policies, the same link seen at 10 ms and at 1 s resolution, the control-latency sweep, and the advisory feed beside the offline attribution. It is plain HTML and JavaScript with no build step, and reads the JSON in `results/`.
+Then open http://localhost:8765/dashboard/. It replays any scenario under any policy: the fabric with every link coloured by utilisation, iteration time for all three policies, the same link seen at 10 ms and at 1 s resolution, the control-latency sweep, and the advisory feed beside the offline attribution. It is plain HTML and JavaScript with no build step, and reads the JSON in `results/`. A link such as `/dashboard/?scenario=gray_link&policy=telemetry&theme=light` opens a given view; `theme` overrides the OS light or dark setting.
+
+![The full dashboard in light mode, with the telemetry loop selected: the faulted link is quarantined (dashed) and the advisory names it.](docs/img/dashboard-full-light.png)
 
 ## MCP server: network state for agents and schedulers
 

@@ -15,7 +15,10 @@ const SCENARIOS = {
   bad_nic: ["Bad NIC", "One training host's NIC drops to 40% goodput. No route avoids it."],
   noisy_neighbor: ["Noisy neighbour", "Bursty inference transfers share the fabric with training."],
 };
-const DARK = matchMedia("(prefers-color-scheme: dark)").matches;
+// ?theme=light|dark overrides the OS setting.
+const THEME = new URLSearchParams(location.search).get("theme");
+if (THEME === "light" || THEME === "dark") document.documentElement.dataset.theme = THEME;
+const DARK = THEME === "dark" || (THEME !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
 // Sequential blue: near zero recedes toward the surface in either mode.
 const RAMP = DARK
   ? ["#2c2c2a", "#104281", "#1c5cab", "#2a78d6", "#5598e7", "#86b6ef", "#cde2fb"]
@@ -438,6 +441,10 @@ async function init() {
   let rz;
   addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { fabricLinks = []; select({}); renderSweep(); }, 150); });
   renderTable();
+  // Deep links: ?scenario=gray_link&policy=telemetry
+  const q = new URLSearchParams(location.search);
+  if (q.get("scenario") in SCENARIOS) state.scenario = q.get("scenario");
+  if (POLICIES.some((p) => p.id === q.get("policy"))) state.policy = q.get("policy");
   await select({});
   renderSweep();
   // Open on the moment the fault lands.
