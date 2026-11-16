@@ -1,0 +1,21 @@
+[project]
+name = "fabricpulse"
+version = "0.1.0"
+description = "Telemetry-driven networking simulator for AI clusters: measures how the fabric moves Model FLOPS Utilization."
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.26"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+# MCP server. The dashboard needs nothing beyond the standard library.
+serve = ["mcp>=2"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["fabricpulse*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

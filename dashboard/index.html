@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FabricPulse</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>FabricPulse</h1>
+      <p class="sub">How much GPU time the network wastes, and how much a telemetry-driven control loop wins back.</p>
+    </div>
+    <div class="picker" id="scenarios" role="tablist" aria-label="Scenario"></div>
+  </header>
+  <p class="sub" id="scenario-desc"></p>
+  <div id="error" class="error" hidden></div>
+
+  <section class="tiles" id="tiles" aria-label="Policy results"></section>
+  <p class="note">Tiles are the mean of all seeds. The views below replay seed 0 of the selected policy.</p>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Fabric</h2>
+      <div class="legend" id="fabric-legend"></div>
+    </div>
+    <div id="fabric"></div>
+    <div class="transport">
+      <button id="play" aria-label="Play or pause">Play</button>
+      <input id="scrub" type="range" min="0" max="0" value="0" aria-label="Time">
+      <span id="clock" class="mono"></span>
+    </div>
+    <div id="events" class="events"></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <div class="card-head"><h2>Training iteration time</h2><div class="legend" id="iter-legend"></div></div>
+      <p class="note">Every GPU in the job waits for the slowest transfer, so one slow path stretches the whole iteration.</p>
+      <div id="iter-chart" class="chart"></div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>What polling hides</h2><div class="legend" id="res-legend"></div></div>
+      <p class="note" id="res-note"></p>
+      <div id="res-chart" class="chart"></div>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="card-head"><h2>Reaction time is the product</h2></div>
+    <p class="note">The telemetry policy with its control loop slowed from 1 ms to 30 s. Dashed lines: the ideal network, and static ECMP under the same fault.</p>
+    <div class="grid3" id="sweep"></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <div class="card-head"><h2>Advisories from the control loop</h2></div>
+      <div id="advisories"></div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Offline attribution from job data</h2></div>
+      <p class="note">Suspects ranked from transfer times and paths alone, with congestion explained away.</p>
+      <div id="suspects"></div>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="card-head"><h2>All results</h2></div>
+    <div class="table-wrap" id="table"></div>
+  </section>
+
+  <footer class="note">Fluid simulation, not a packet simulator or hardware. See the README for what the numbers do and do not show.</footer>
+</main>
+<div id="tip" class="tip" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>
